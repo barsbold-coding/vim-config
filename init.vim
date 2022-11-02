@@ -1,171 +1,81 @@
-
-" Fundamental{{{
-set number
-set relativenumber
+" Fundamentals
+set number " Show line number
+set relativenumber " Make line numbers relative
 set syntax=on
-set hlsearch
-set autowrite
-set autoindent
-set titlestring=string
-set title
-set confirm
-set ignorecase
+set hlsearch " Show highlights on search
 set shiftwidth=2
-set tabstop=2
-set scrolloff=2
-set cursorline
-set cursorcolumn
-set mouse=a
-set foldenable
-set foldmethod=marker
-set foldnestmax=2
-set hidden
-set nobackup
-set nowritebackup
-set cmdheight=1
-set updatetime=300
-set shortmess+=c
-set signcolumn=number
+set autoindent
+set tabstop=2 
+set scrolloff=3
 set colorcolumn=80
+set mouse=a " Enable mouse navigation
+set noshowmode
+set statusline=3
+set updatetime=800
+set cindent
 
-" }}}
-
-" Plugins{{{
+" Call plugins
 call plug#begin()
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'tpope/vim-commentary'
-Plug 'preservim/nerdtree'
-Plug 'https://github.com/ellisonleao/gruvbox.nvim'
-Plug 'itchyny/lightline.vim'
-Plug 'ryanoasis/vim-devicons'
-Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
+Plug 'EdenEast/nightfox.nvim' " Color Scheme
+Plug 'b3nj5m1n/kommentary' " Comment toggler
+Plug 'windwp/nvim-autopairs' " Quote and Brackets autopairs
+Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
+Plug 'tamton-aquib/staline.nvim' " Cool status and buffer lines
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Auto completions
+Plug 'nvim-lua/plenary.nvim' " Overlay window
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' } " File searcher
+Plug 'nvim-tree/nvim-tree.lua' " Tree file explorer
+Plug 'lukas-reineke/indent-blankline.nvim' " Indent liner
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'kien/ctrlp.vim'
-" post install (yarn install | npm install) then load plugin only for editing supported files
-Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
-Plug 'sbdchd/neoformat'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'https://github.com/cohama/lexima.vim'
-Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
-Plug 'mxw/vim-jsx'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 call plug#end()
-"}}}
+let g:tigris#enabled = 1
 
-" Key mapping {{{
-nnoremap Y "*y
-vnoremap Y "*y
-"}}}
+" Color Scheme config
+let g:solarized_italic_comments = v:true
+colorscheme nightfox 
+" Set comments italic
+highlight Comment gui=italic
 
-" COC config{{{
-" 	TAB key
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
+" Custom keybindings
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <Tab>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+nnoremap <C-f> <cmd>Telescope find_files<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <C-t> <cmd>NvimTreeToggle<cr>
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call ShowDocumentation()<CR>
-
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-"}}}
-
-" NERDTree config {{{
-
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
-
-" Exit Vim if NERDTree is the only window remaining in the only tab.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-
-"}}}
-
-" Gruvbox config {{{
-set background=dark
-colorscheme gruvbox
-" }}}
-
-" Lightline config {{{
-set laststatus=2
-set noshowmode
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-			\ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'coffee' ] ]
-			\ },
-			\ 'component': {
-			\ 	'coffee': '☕️'
-      \ },
-			\ 'component_function': {
-			\ 	'coffee': 'LightlineCoffee'
-			\	},
-      \ }
-
-function! LightlineCoffee()
-  return winwidth(0) > 70 ? '☕️' : ''
-endfunction
-" }}}
-
-" Fuzzy finder config{{{
-" FZF key bindings
-nnoremap <C-f> :FZF<CR>
-nnoremap F :GFiles<CR>
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-i': 'split',
-  \ 'ctrl-v': 'vsplit' }
-"}}}
-
-" Prettier config {{{
-let g:neoformat_try_node_exe = 1
-autocmd BufWritePre *.js Neoformat
-"}}}
-
-" TreeSitter config{{{
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
+" Lua file load
+lua << EOLua
+vim.opt.laststatus=2
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+require("nvim-autopairs").setup {}
+require("staline").setup()
+require("nvim-tree").setup()
+require("stabline").setup({
+	style="slant",
+})
+require("indent_blankline").setup {
+    -- for example, context is off by default, use this to turn it on
+    show_current_context = true,
+    show_current_context_start = true,
 }
-EOF
-"}}}
-
-" Put this in your .vimrc
-augroup import_cost_auto_run
-  autocmd!
-  autocmd InsertLeave *.js,*.jsx,*.ts,*.tsx ImportCost
-  autocmd BufEnter *.js,*.jsx,*.ts,*.tsx ImportCost
-augroup END
+require('telescope').setup{
+	defaults = {
+		file_ignore_patterns = {"node_modules"}
+	}
+}
+EOLua
