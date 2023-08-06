@@ -1,4 +1,12 @@
 local cmp = require('cmp')
+local copilot_ok, copilot = pcall(require, "copilot_cmp")
+
+if not copilot_ok then
+  return
+end
+
+copilot.setup()
+
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -31,6 +39,8 @@ cmp.setup({
     { name = 'nvim_lsp' },
   }, {
     { name = 'buffer' },
+  }, {
+    { name = "copilot", group_index = 2 }
   }),
   sorting = {
     comparators = {

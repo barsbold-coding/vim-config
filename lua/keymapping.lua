@@ -54,6 +54,9 @@ map("v", "<A-n>", ":m .+1<CR>==")
 map("v", "<A-t>", ":m .-2<CR>==")
 map("v", "p", '"_dP')
 
+map("n", 'llb', 'yyp')
+map("n", 'llt', 'yyP')
+
 -- Refactoring keymaps
 vim.api.nvim_set_keymap("v", "<space>re", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], {noremap = true, silent = true, expr = false})
 vim.api.nvim_set_keymap("v", "<space>rf", [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]], {noremap = true, silent = true, expr = false})
@@ -105,3 +108,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
+
+
+-- Harpoon Markings
+local marks = require('harpoon.mark')
+
+map('n', 'ma', marks.add_file, { silent = true })
+map('n', 'md', marks.rm_file, { silent = true })
+map('n', 'mD', marks.clear_all, { silent = true })
+map('n', 'mt', ':Telescope harpoon marks<cr>', { silent = true })
+

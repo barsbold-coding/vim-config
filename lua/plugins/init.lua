@@ -17,8 +17,6 @@ require('packer').startup(function(use)
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/nvim-cmp'
-  use 'dcampos/nvim-snippy'
-  use 'dcampos/cmp-snippy'
   use 'kylechui/nvim-surround'
   use 'windwp/nvim-autopairs'
   use 'petertriho/nvim-scrollbar'
@@ -34,7 +32,10 @@ require('packer').startup(function(use)
   use 'pwntester/octo.nvim'
   use 'nvim-treesitter/nvim-treesitter'
   use 'ThePrimeagen/refactoring.nvim'
-  use 'ludovicchabant/vim-gutentags'
+  use 'ThePrimeagen/harpoon'
+  use 'zbirenbaum/copilot.lua'
+  use 'zbirenbaum/copilot-cmp'
+  use 'onsails/lspkind-nvim'
 
 end)
 
@@ -49,3 +50,4 @@ require('plugins.project')
 require('plugins.alpha')
 require('plugins.leap')
 require('plugins.octo')
+require('plugins.copilot')
