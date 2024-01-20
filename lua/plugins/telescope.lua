@@ -4,5 +4,7 @@ if not status then
   return
 end
 
-telescope.setup({})
+telescope.setup({
+})
 telescope.load_extension('harpoon')
+telescope.load_extension('noice')

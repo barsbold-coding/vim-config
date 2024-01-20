@@ -1,6 +1,14 @@
-require('mason').setup()
+local mason_ok, mason = pcall(require, 'mason')
+local null_ok, null_ls = pcall(require, 'null-ls')
+local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
+local scrollbar_ok, scrollbar = pcall(require, 'scrollbar')
 
-local null_ls = require('null-ls')
+if not mason_ok and not null_ok and not lspconfig_ok then
+  return
+end
+
+mason.setup()
+
 -- local formatting = null_ls.builtins.formatting
 -- local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
@@ -10,19 +18,24 @@ null_ls.setup({
 --   formatting.eslint,
 })
 
-
-local lspconfig = require('lspconfig')
-lspconfig.tsserver.setup {
-  root_dir = lspconfig.util.root_pattern('package.json', 'index.html'),
-  single_file_support = false,
-}
+-- lspconfig.tsserver.setup {
+--   root_dir = lspconfig.util.root_pattern('package.json', 'index.html'),
+--   single_file_support = false,
+--   filetypes = {'typescript', 'javascript', 'typescriptreact', 'javascriptreact'}
+-- }
 lspconfig.denols.setup {
   root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
 }
 lspconfig.eslint.setup {}
 lspconfig.clangd.setup {}
 lspconfig.emmet_ls.setup {}
-lspconfig.rust_analyzer.setup {}
+lspconfig.jedi_language_server.setup {}
+lspconfig.volar.setup{
+  filetypes = {'vue', 'typescript'}
+}
+lspconfig.rust_analyzer.setup {
+  single_file_support = true,
+}
 lspconfig.lua_ls.setup {
   settings = {
     Lua = {
@@ -40,5 +53,8 @@ vim.diagnostic.config {
 }
 vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
+if not scrollbar_ok then
+  return
+end
 
 require('scrollbar').setup()

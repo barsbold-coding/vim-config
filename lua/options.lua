@@ -34,7 +34,6 @@ local options = {
   number = true,
   relativenumber = true,
   numberwidth = 4,
-
   signcolumn = "yes",
   wrap = true,
   linebreak = true,
@@ -57,7 +56,9 @@ set.splitbelow = true
 set.splitright = true
 set.scrolloff = 8
 vim.cmd[[set encoding=utf-8]]
-vim.cmd[[colorscheme tokyonight-night]]
+vim.cmd[[set colorcolumn=72]]
+-- vim.cmd[[colorscheme tokyonight-night]]
+-- vim.cmd.colorscheme("tokyonight-night")
 g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 

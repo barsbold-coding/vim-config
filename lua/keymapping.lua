@@ -6,21 +6,27 @@ end
 
 map('n', '<space>e', ':NvimTreeToggle<cr>', {silent = true})
 
-local nvim_tmux_nav = require('nvim-tmux-navigation')
-nvim_tmux_nav.setup({
-  disable_when_zoomed = true,
-})
+local tmux_ok, nvim_tmux_nav = pcall(require, 'nvim-tmux-navigation')
 
-map('n', '<C-h>', nvim_tmux_nav.NvimTmuxNavigateLeft)
-map('n', '<C-t>', nvim_tmux_nav.NvimTmuxNavigateDown)
-map('n', '<C-n>', nvim_tmux_nav.NvimTmuxNavigateUp)
-map('n', '<C-s>', nvim_tmux_nav.NvimTmuxNavigateRight)
+if tmux_ok then
+  nvim_tmux_nav.setup({
+    disable_when_zoomed = true,
+  })
 
-local builtin = require('telescope.builtin')
-map('n', '<space>f', builtin.find_files)
-map('n', '<space>b', builtin.buffers)
-map('n', '<space>F', builtin.live_grep)
-map('n', '<space>df', builtin.diagnostics)
+  map('n', '<C-h>', nvim_tmux_nav.NvimTmuxNavigateLeft)
+  map('n', '<C-t>', nvim_tmux_nav.NvimTmuxNavigateDown)
+  map('n', '<C-n>', nvim_tmux_nav.NvimTmuxNavigateUp)
+  map('n', '<C-s>', nvim_tmux_nav.NvimTmuxNavigateRight)
+end
+
+local builtin_ok, builtin = pcall(require, 'telescope.builtin')
+
+if builtin_ok then
+  map('n', '<space>f', builtin.find_files)
+  map('n', '<space>b', builtin.buffers)
+  map('n', '<space>F', builtin.live_grep)
+  map('n', '<space>df', builtin.diagnostics)
+end
 
 -- Dvorak - Normal
 map("n", "h", "h")
@@ -100,7 +106,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '<leader>f', function()
@@ -111,10 +116,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 
 -- Harpoon Markings
-local marks = require('harpoon.mark')
+local marks_ok, marks = pcall('harpoon.mark')
 
-map('n', 'ma', marks.add_file, { silent = true })
-map('n', 'md', marks.rm_file, { silent = true })
-map('n', 'mD', marks.clear_all, { silent = true })
-map('n', 'mt', ':Telescope harpoon marks<cr>', { silent = true })
+if marks_ok then
+  map('n', '<leader>ma', marks.add_file, { silent = true })
+  map('n', '<leader>md', marks.rm_file, { silent = true })
+  map('n', '<leader>mD', marks.clear_all, { silent = true })
+  map('n', '<leader>mt', ':Telescope harpoon marks<cr>', { silent = true })
+end
 

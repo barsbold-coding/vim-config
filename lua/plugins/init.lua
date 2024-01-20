@@ -1,45 +1,65 @@
-require('packer').startup(function(use)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
-  use 'wbthomason/packer.nvim'
-
-  use 'folke/tokyonight.nvim'
-  use 'tamton-aquib/staline.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
-  use 'nvim-tree/nvim-tree.lua'
-  use 'nvim-tree/nvim-web-devicons'
-  use 'tpope/vim-commentary'
-  use 'nvim-lualine/lualine.nvim'
-  use 'neovim/nvim-lspconfig'
-  use 'jose-elias-alvarez/null-ls.nvim'
-  use 'williamboman/mason.nvim'
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/nvim-cmp'
-  use 'kylechui/nvim-surround'
-  use 'windwp/nvim-autopairs'
-  use 'petertriho/nvim-scrollbar'
-  use 'alexghergh/nvim-tmux-navigation'
-  use 'lewis6991/gitsigns.nvim'
-  use 'akinsho/bufferline.nvim'
-  use 'sindrets/diffview.nvim'
-  use 'ahmedkhalf/project.nvim'
-  use 'lukas-reineke/indent-blankline.nvim'
-  use 'goolord/alpha-nvim'
-  use 'ggandor/leap.nvim'
-  use 'lukas-reineke/cmp-under-comparator'
-  use 'pwntester/octo.nvim'
-  use 'nvim-treesitter/nvim-treesitter'
-  use 'ThePrimeagen/refactoring.nvim'
-  use 'ThePrimeagen/harpoon'
-  use 'zbirenbaum/copilot.lua'
-  use 'zbirenbaum/copilot-cmp'
-  use 'onsails/lspkind-nvim'
-
-end)
+require("lazy").setup({
+  'folke/tokyonight.nvim',
+  'tamton-aquib/staline.nvim',
+  'nvim-lua/plenary.nvim',
+  { 'nvim-telescope/telescope.nvim', event = 'VeryLazy' },
+  'nvim-tree/nvim-tree.lua',
+  'nvim-tree/nvim-web-devicons',
+  'tpope/vim-commentary',
+  'nvim-lualine/lualine.nvim',
+  'neovim/nvim-lspconfig',
+  'jose-elias-alvarez/null-ls.nvim',
+  'williamboman/mason.nvim',
+  'hrsh7th/cmp-nvim-lsp',
+  'hrsh7th/cmp-buffer',
+  'hrsh7th/cmp-path',
+  'dcampos/nvim-snippy',
+  'hrsh7th/nvim-cmp',
+  'kylechui/nvim-surround',
+  'windwp/nvim-autopairs',
+  'petertriho/nvim-scrollbar',
+  'alexghergh/nvim-tmux-navigation',
+  'lewis6991/gitsigns.nvim',
+  'akinsho/bufferline.nvim',
+  'sindrets/diffview.nvim',
+  'ahmedkhalf/project.nvim',
+  'lukas-reineke/indent-blankline.nvim',
+  'goolord/alpha-nvim',
+  'ggandor/leap.nvim',
+  'lukas-reineke/cmp-under-comparator',
+  'pwntester/octo.nvim',
+  'nvim-treesitter/nvim-treesitter',
+  'ThePrimeagen/refactoring.nvim',
+  'ThePrimeagen/harpoon',
+  'zbirenbaum/copilot.lua',
+  'zbirenbaum/copilot-cmp',
+  'onsails/lspkind-nvim',
+  'smjonas/inc-rename.nvim',
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    }
+  }
+})
 
 require('plugins.telescope')
+require('plugins.treesitter')
 require('plugins.staline')
 require('plugins.nvimtree')
 require('plugins.lsp')
@@ -49,5 +69,8 @@ require('plugins.gitsigns')
 require('plugins.project')
 require('plugins.alpha')
 require('plugins.leap')
+require('plugins.theme')
 require('plugins.octo')
 require('plugins.copilot')
+require('plugins.rename')
+require('plugins.noice')

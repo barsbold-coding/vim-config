@@ -5,6 +5,14 @@ if not ok then
 end
 
 copilot.setup({
+  filetypes = {
+    c = false,
+    cpp = false,
+    javascript = false,
+    typescript = false,
+    javascriptreact = false,
+    typescriptreact = false,
+  },
   suggestion = { enabled = false },
   panel = { enabled = false },
 })

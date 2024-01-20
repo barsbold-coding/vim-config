@@ -1,12 +1,8 @@
-local cmp = require('cmp')
-local copilot_ok, copilot = pcall(require, "copilot_cmp")
+local cmp_ok, cmp = pcall(require, 'cmp')
 
-if not copilot_ok then
+if not cmp_ok then
   return
 end
-
-copilot.setup()
-
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -14,7 +10,10 @@ local has_words_before = function()
 end
 
 cmp.setup({
-  window = {
+  snippet = {
+    expand = function(args)
+      require('snippy').expand_snippet(args.body) -- For `snippy` users.
+    end,
   },
   mapping = cmp.mapping.preset.insert({
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
@@ -35,13 +34,11 @@ cmp.setup({
         end
       end, { "i", "s" }),
   }),
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-  }, {
-    { name = 'buffer' },
-  }, {
-    { name = "copilot", group_index = 2 }
-  }),
+  sources = cmp.config.sources(
+    { { name = 'nvim_lsp' } },
+    { { name = 'buffer' } },
+    { { name = "copilot", group_index = 2 } }
+  ),
   sorting = {
     comparators = {
       cmp.config.compare.offset,
