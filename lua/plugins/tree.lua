@@ -1,0 +1,20 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+local status_ok, nvim_tree = pcall(require, "nvim-tree")
+if not status_ok then
+  return
+end
+
+nvim_tree.setup({
+  update_focused_file = {
+    enable = true,
+    update_cwd = true,
+  },
+  view = {
+    width = 40,
+    side = "left",
+  },
+})
+
+vim.keymap.set('n', '<space>e', ':NvimTreeToggle<cr>', {silent = true})
