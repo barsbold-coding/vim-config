@@ -61,7 +61,7 @@ require('plugins.ncmp')
 require('plugins.stal')
 require('plugins.surr')
 require('plugins.tree')
+require('plugins.sign')
 require('scrollbar').setup()
-require('gitsigns').setup()
 
 vim.cmd[[colorscheme tokyonight-night]]
