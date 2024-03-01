@@ -1,14 +1,16 @@
+local map = require('keymapping')
 local harpoon = require("harpoon")
 
 -- REQUIRED
 harpoon:setup()
 -- REQUIRED
 
-vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end)
+map("n", "<leader>ma", function() harpoon:list():append() end)
+map("n", "<leader>md", function() harpoon:list():remove() end)
 
 -- Toggle previous & next buffers stored within Harpoon list
--- vim.keymap.set("n", "<C-h>", function() harpoon:list():prev() end)
--- vim.keymap.set("n", "<C-s>", function() harpoon:list():next() end)
+map("n", "<leader>mh", function() harpoon:list():prev() end)
+map("n", "<leader>ms", function() harpoon:list():next() end)
 
 local harpoon = require('harpoon')
 harpoon:setup({})
@@ -31,5 +33,5 @@ local function toggle_telescope(harpoon_files)
     }):find()
 end
 
-vim.keymap.set("n", "<C-e>", function() toggle_telescope(harpoon:list()) end,
+map("n", "<leader>h", function() toggle_telescope(harpoon:list()) end,
     { desc = "Open harpoon window" })
