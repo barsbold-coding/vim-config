@@ -1,3 +1,5 @@
+local map = require('keymapping')
+
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -17,4 +19,4 @@ nvim_tree.setup({
   },
 })
 
-vim.keymap.set('n', '<space>e', ':NvimTreeToggle<cr>', {silent = true})
+map('n', '<space>e', ':NvimTreeToggle<cr>', {silent = true})

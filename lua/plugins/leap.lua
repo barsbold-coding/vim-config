@@ -9,6 +9,7 @@ if not leap_ok then
   return
 end
 
+leap.opts.safe_labels = "lrcgpfcgfjqkxbwvzueo"
 leap.init_highlight(true)
 
 map('n', 'j', function ()
