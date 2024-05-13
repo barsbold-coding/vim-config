@@ -1,5 +1,6 @@
 local cmp_ok, cmp = pcall(require, 'cmp')
 local lspkind_ok, lspkind = pcall(require, 'lspkind')
+local luasnip = require('luasnip')
 
 if not cmp_ok then
   return
@@ -17,6 +18,8 @@ lspkind.init({
     Method = "",
     Function = "ƒ",
     Constructor = "",
+    Copilot = "",
+    Snippet = ""
   },
 })
 
@@ -34,31 +37,49 @@ cmp.setup({
   },
   snippet = {
     expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      require('luasnip').lsp_expand(args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert({
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+     ['<CR>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+            if luasnip.expandable() then
+                luasnip.expand()
+            else
+                cmp.confirm({
+                    select = true,
+                })
+            end
+        else
+            fallback()
+        end
+    end),
+
     ["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        elseif has_words_before() then
-          cmp.complete()
-        else
-          fallback()
-        end
-      end, { "i", "s" }),
-      ["<S-Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        else
-          fallback()
-        end
-      end, { "i", "s" }),
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.locally_jumpable(1) then
+        luasnip.jump(1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.locally_jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
   }),
   sources = cmp.config.sources({
+    { name = 'copilot', group_index = 2 },
     { name = 'nvim_lsp' },
     { name = 'buffer' },
-    { name = 'vsnip' },
+    { name = 'luasnip' },
+    { name = 'path' }
   }),
 })

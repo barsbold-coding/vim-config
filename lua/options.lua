@@ -1,7 +1,9 @@
 local o = vim.opt
-local k = vim.keycode
+local keycode = vim.keycode
 
-vim.g.mapleader = k'<space>'
+vim.g.mapleader = keycode'<space>'
+
+-- o.statuscolumn = "%s%#AbsoluteColumn#%l%1*│%r "
 
 local options = {
 	hlsearch = true,

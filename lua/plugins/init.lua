@@ -33,8 +33,7 @@ require("lazy").setup({
   'hrsh7th/nvim-cmp',
 
   'hrsh7th/cmp-vsnip',
-  'hrsh7th/vim-vsnip',
-  'hrsh7th/vim-vsnip-integ',
+  'saadparwaiz1/cmp_luasnip',
 
   'nvim-tree/nvim-web-devicons',
   'onsails/lspkind.nvim',
@@ -49,19 +48,46 @@ require("lazy").setup({
   'nvim-tree/nvim-tree.lua',
 
   'sindrets/diffview.nvim',
+
+  {
+    "L3MON4D3/LuaSnip",
+    -- follow latest release.
+    version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    build = "make install_jsregexp"
+  },
+
+  {
+    'zbirenbaum/copilot.lua',
+    config = function ()
+      require('copilot').setup({})
+    end
+  },
+
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function ()
+      require("copilot_cmp").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end
+  }
 })
 
-require('plugins.leap')
-require('plugins.tmux')
-require('plugins.tele')
-require('plugins.harp')
-require('plugins.trst')
-require('plugins.lspc')
-require('plugins.ncmp')
-require('plugins.stal')
-require('plugins.surr')
-require('plugins.tree')
-require('plugins.sign')
+pcall(require, 'plugins.leap')
+pcall(require, 'plugins.tmux')
+pcall(require, 'plugins.tele')
+pcall(require, 'plugins.harp')
+pcall(require, 'plugins.trst')
+pcall(require, 'plugins.lspc')
+pcall(require, 'plugins.snip')
+pcall(require, 'plugins.ncmp')
+pcall(require, 'plugins.stal')
+pcall(require, 'plugins.surr')
+pcall(require, 'plugins.tree')
+pcall(require, 'plugins.sign')
+-- pcall(require, 'plugins.copi')
 require('scrollbar').setup()
 
 vim.cmd[[colorscheme tokyonight-night]]
